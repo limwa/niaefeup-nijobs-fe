@@ -54,6 +54,7 @@
     "react-content-loader": "^4.2.2",
     "react-dev-utils": "^9.0.3",
     "react-dom": "^16.8.0",
+    "react-loading-skeleton": "^1.2.0",
     "react-redux": "^5.1.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^3.0.1",
