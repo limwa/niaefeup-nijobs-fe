@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout from "./components/PageLayout";
+import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
@@ -41,6 +42,17 @@ const AppRouter = () => (
                     <ApplicationsReviewPage />
                 </PageLayout>
             </ProtectedRoute>
+            <Route
+                exact
+                path="/company/offers/manage"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="You are not allowed to access the company offers management page."
+                authorize={(user) => (user?.company)}
+            >
+                <PageLayout pageTitle="Manage Offers">
+                    <CompanyOffersManagementPage />
+                </PageLayout>
+            </Route>
             <Route
                 path="/error"
             >

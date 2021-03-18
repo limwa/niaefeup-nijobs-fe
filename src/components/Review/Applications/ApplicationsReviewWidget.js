@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
+    Divider,
+    makeStyles,
     Paper, Typography,
 } from "@material-ui/core";
 
-import { alphabeticalSorter } from "../../../utils/Table/utils";
+import { alphabeticalSorter, generateTableCellFromField } from "../../../utils/Table/utils";
 import { ApplicationStateLabel, columns } from "./ApplicationsReviewTableSchema";
 import { CompanyNameFilter, StateFilter, DateFromFilter, DateToFilter } from "./Filters";
 import UndoableActionsHandlerProvider from "../../../utils/UndoableActionsHandlerProvider";
@@ -103,6 +105,62 @@ const ApplicationsReviewWidget = () => {
             } }));
     }, [setRows]);
 
+    const RowComponent = ({ rowKey, labelId }) => {
+        const fields = rows[rowKey].fields;
+
+        return (
+            <>
+                {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                    generateTableCellFromField(i, fieldId, fieldOptions, labelId)
+                ))}
+            </>
+        );
+
+    };
+
+    const useRowCollapseStyles = makeStyles((theme) => ({
+        payloadSection: {
+            "&:not(:first-child)": {
+                paddingTop: theme.spacing(2),
+            },
+            "&:not(:first-child) p:first-of-type": {
+                paddingTop: theme.spacing(2),
+            },
+        },
+    }));
+
+    const RowCollapseComponent = ({ rowKey }) => {
+        const row = rows[rowKey];
+        const classes = useRowCollapseStyles();
+        return (
+            <>
+                <Typography variant="subtitle2">
+                    {row.payload.email}
+                </Typography>
+                <div className={classes.payloadSection}>
+                    <Typography variant="body1">
+                            Motivation
+                    </Typography>
+                    <Typography variant="body2">
+                        {row.payload.motivation}
+                    </Typography>
+                </div>
+
+                {row.fields.state.value === ApplicationStateLabel.REJECTED &&
+                <div className={classes.payloadSection}>
+                    <Divider />
+                    <Typography variant="body1">
+                        {`Reject Reason (Rejected at ${row.payload.rejectedAt})`}
+                    </Typography>
+                    <Typography variant="body2">
+                        {row.payload.rejectReason}
+                    </Typography>
+                </div>
+                }
+            </>
+        );
+    };
+
     return (
         <>
             <UndoableActionsHandlerProvider>
@@ -134,6 +192,8 @@ const ApplicationsReviewWidget = () => {
                                 approveApplicationRow,
                                 rejectApplicationRow,
                             }}
+                            RowComponent={RowComponent}
+                            RowCollapseComponent={RowCollapseComponent}
                         />
                     }
                 </Paper>
