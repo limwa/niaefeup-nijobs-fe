@@ -24,9 +24,9 @@ const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     }
 };
 
-const generateRow = ({ position, location }) => ({
+const generateRow = ({ title, location }) => ({
     fields: {
-        title: { value: position, align: "left" },
+        title: { value: title, align: "left" },
         publishStartDate: { value: format(parseISO((new Date()).toISOString()), "yyyy-MM-dd") },
         publishEndDate: { value: format(parseISO((new Date()).toISOString()), "yyyy-MM-dd") },
         location: { value: location },
