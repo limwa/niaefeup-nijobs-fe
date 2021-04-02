@@ -63,12 +63,12 @@ const RenderTableRow = ({
 RenderTableRow.propTypes = {
     rowKey: PropTypes.string.isRequired,
     fields: RowFields.isRequired,
-    payload: RowPayload.isRequired,     // Need to check what to do with this propTypes (specific to Company Applications)
+    payload: RowPayload,     // Need to check what to do with this propTypes (specific to Company Applications)
     rowProps: PropTypes.object.isRequired,
     handleSelect: PropTypes.func.isRequired,
     isRowSelected: PropTypes.func.isRequired,
     RowActions: PropTypes.elementType.isRequired,
-    submitUndoableAction: PropTypes.func.isRequired,
+    submitUndoableAction: PropTypes.func,   // Need to check what to do with this propTypes (specific to Company Applications)
     context: PropTypes.object,
     RowActionsProps: PropTypes.object,
     RowComponent: PropTypes.elementType.isRequired,

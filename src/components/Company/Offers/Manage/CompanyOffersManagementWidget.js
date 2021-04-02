@@ -7,6 +7,7 @@ import FilterableTable from "../../../../utils/Table/FilterableTable";
 import { generateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
+import { OfferTitleFilter, publishDateFilter } from "../Filters/index";
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -41,7 +42,15 @@ const sorters = {
 };
 
 const filters = [
-
+    { id: "offer-title-filter", render: OfferTitleFilter },
+    { id: "publish-date-filter",
+        render: publishDateFilter,
+        props: {
+            onChange: (date, filtersContext, setFiltersContext) => {
+                setFiltersContext((filtersContext) => ({ ...filtersContext, minDate: date }));
+            },
+        },
+    },
 ];
 
 const RowActions = () => (
