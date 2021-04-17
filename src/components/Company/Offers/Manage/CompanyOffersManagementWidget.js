@@ -1,13 +1,14 @@
-import { Card, CardContent, Typography } from "@material-ui/core";
+import { Card, CardContent /* Typography */ } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
 import ControlledSortableSelectableTable from "../../../../utils/Table/ControlledSortableSelectableTable";
 import FilterableTable from "../../../../utils/Table/FilterableTable";
-import { generateTableCellFromField } from "../../../../utils/Table/utils";
+import { alphabeticalSorter, generateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
 import { OfferTitleFilter, PublishDateFilter, PublishEndDateFilter, LocationFilter } from "../Filters/index";
+import { RowActions } from "../Actions";
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -38,7 +39,7 @@ const generateRow = ({ title, location }) => ({
 });
 
 const sorters = {
-
+    title: alphabeticalSorter,
 };
 
 const filters = [
@@ -62,9 +63,10 @@ const filters = [
     { id: "location-filter", render: LocationFilter },
 ];
 
+/*
 const RowActions = () => (
     <Typography>Rows Actions</Typography>
-);
+);  */
 
 
 const CompanyOffersManagementWidget = () => {
@@ -108,7 +110,6 @@ const CompanyOffersManagementWidget = () => {
     return (
         <div>
             <Card>
-                {/* <CardHeader title="Offers Management" /> */}
                 <CardContent>
                     {isLoading || error ?
                         <CompanyOffersNonFullfilledRequest isLoading={isLoading} error={error} />
@@ -133,7 +134,6 @@ const CompanyOffersManagementWidget = () => {
                             RowComponent={RowComponent}
                         />
                     }
-
                 </CardContent>
             </Card>
         </div>
