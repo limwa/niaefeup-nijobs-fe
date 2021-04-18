@@ -1,4 +1,6 @@
-import { Card, CardContent /* Typography */ } from "@material-ui/core";
+import { Card, CardContent, /* Typography */
+    makeStyles,
+    Typography } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -26,7 +28,7 @@ const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     }
 };
 
-const generateRow = ({ title, location }) => ({
+const generateRow = ({ title, location, description, ownerName }) => ({
     fields: {
         title: { value: title, align: "left" },
         publishStartDate: { value: format(parseISO((new Date()).toISOString()), "yyyy-MM-dd") },
@@ -34,7 +36,8 @@ const generateRow = ({ title, location }) => ({
         location: { value: location },
     },
     payload: {
-
+        ownerName: { value: ownerName },
+        description: { value: description },
     },
 });
 
@@ -107,6 +110,56 @@ const CompanyOffersManagementWidget = () => {
         labelId: PropTypes.string.isRequired,
     };
 
+    const useRowCollapseStyles = makeStyles((theme) => ({
+        payloadSection: {
+            "&:not(:first-child)": {
+                paddingTop: theme.spacing(2),
+            },
+            "&:not(:first-child) p:first-of-type": {
+                paddingTop: theme.spacing(2),
+            },
+        },
+        actionsDivider: {
+            paddingTop: theme.spacing(2),
+        },
+    }));
+
+    const RowCollapseComponent = ({ rowKey }) => {
+        const row = offers[rowKey];
+        const classes = useRowCollapseStyles();
+        return (
+            <>
+                <Typography variant="subtitle2">
+                    {row.payload.ownerName.value    /* CHECK WHY THIS IS NULL */}
+                </Typography>
+                <div className={classes.actionsDivider}>
+                    <Typography variant="body1">
+                            Description
+                    </Typography>
+                    <Typography variant="body2">
+                        {row.payload.description.value}
+                    </Typography>
+                </div>
+
+                { /* row.fields.state.value === ApplicationStateLabel.REJECTED &&
+                <div className={classes.payloadSection}>
+                    <Divider />
+                    <Typography variant="body1">
+                        {`Reject Reason (Rejected at ${row.payload.rejectedAt})`}
+                    </Typography>
+                    <Typography variant="body2">
+                        {row.payload.rejectReason}
+                    </Typography>
+                </div>
+                */ }
+            </>
+        );
+    };
+
+    RowCollapseComponent.propTypes = {
+        rowKey: PropTypes.string.isRequired,
+    };
+
     return (
         <div>
             <Card>
@@ -132,6 +185,7 @@ const CompanyOffersManagementWidget = () => {
                                 // rejectApplicationRow,
                             }}
                             RowComponent={RowComponent}
+                            RowCollapseComponent={RowCollapseComponent}
                         />
                     }
                 </CardContent>
