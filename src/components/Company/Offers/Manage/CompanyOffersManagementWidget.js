@@ -93,7 +93,7 @@ const CompanyOffersManagementWidget = () => {
         });
     }, []);
 
-    const RowComponent = ({ rowKey, labelId }) => {
+    const RowContent = ({ rowKey, labelId }) => {
         const fields = offers[rowKey].fields;
 
         return (
@@ -105,7 +105,7 @@ const CompanyOffersManagementWidget = () => {
         );
     };
 
-    RowComponent.propTypes = {
+    RowContent.propTypes = {
         rowKey: PropTypes.string.isRequired,
         labelId: PropTypes.string.isRequired,
     };
@@ -184,7 +184,7 @@ const CompanyOffersManagementWidget = () => {
                                 // approveApplicationRow,
                                 // rejectApplicationRow,
                             }}
-                            RowComponent={RowComponent}
+                            RowContent={RowContent}
                             RowCollapseComponent={RowCollapseComponent}
                         />
                     }

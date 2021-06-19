@@ -11,9 +11,9 @@ export default makeStyles((theme) => ({
     homePageLink: ({ isMobile }) => ({
         marginLeft: theme.spacing(isMobile ? 0 : 3),
     }),
-    linkStyle: ({ forceDesktopLayout }) => ({
+    linkStyle: ({ desktopLayout }) => ({
         textDecoration: "none",
-        color: !forceDesktopLayout ? theme.palette.secondary.main : "white",
+        color: !desktopLayout ? theme.palette.secondary.main : "white",
         fontWeight: "500",
         fontSize: "medium",
         display: "flex",
@@ -31,7 +31,7 @@ export default makeStyles((theme) => ({
         flexDirection: "row",
         justifyContent: "flex-end",
     }),
-    userLogo: ({ isMobile, showHomePageLink }) => ({
+    userLogo: ({ isMobile, desktopLayout }) => ({
         backgroundColor: !isMobile && theme.palette.primary.main,
         zIndex: 1,
         cursor: "pointer",
@@ -39,7 +39,7 @@ export default makeStyles((theme) => ({
         width: theme.spacing(6),
         height: theme.spacing(6),
         borderRadius: "50%",
-        color: (isMobile && showHomePageLink) ? theme.palette.secondary.main : "white",
+        color: !desktopLayout ? theme.palette.secondary.main : "white",
     }),
     userMenuButton: {
         color: "white",

@@ -8,6 +8,7 @@ import {
     Toolbar,
     Button,
     Typography,
+    Badge,
 } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
@@ -22,8 +23,9 @@ import { MenuRounded, Home } from "@material-ui/icons";
 
 
 import useNavbarStyles from "./navbarStyles";
+import { Wrap } from "../../utils";
 
-const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, forceDesktopLayout, title, position }) => {
+const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, desktopLayout, title, position }) => {
 
     const { data, isValidating, error, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession();
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
@@ -47,7 +49,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, for
         setUserMenuOpen(false);
     };
     const isMobile = useMobile();
-    const classes = useNavbarStyles({ isMobile, showHomePageLink, forceDesktopLayout });
+    const classes = useNavbarStyles({ isMobile, desktopLayout });
 
     return (
         <AppBar
@@ -62,7 +64,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, for
                     {showHomePageLink &&
                         <Link to="/" className={classes.linkStyle}>
                             <Home className={classes.homeIcon}  />
-                            {!isMobile && "HOMEPAGE"}
+                            {desktopLayout && "HOMEPAGE"}
                         </Link>
                     }
                 </div>
@@ -83,9 +85,21 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, for
                         <Button
                             className={classes.userMenuButton}
                             disableRipple
-                            endIcon={<MenuRounded className={classes.userLogo} />}
+                            endIcon={
+                                <Wrap
+                                    on={!data?.company?.hasFinishedRegistration}
+                                    Wrapper={({ children }) =>
+                                        <Badge variant="dot" color="secondary" overlap="circle">
+                                            {children}
+                                        </Badge>}
+                                >
+
+                                    <MenuRounded className={classes.userLogo} />
+                                </Wrap>
+                            }
                         >
                             {!userMenuOpen && !isMobile && "Account"}
+
                         </Button>
                     }
                 </div>
@@ -114,7 +128,7 @@ Navbar.propTypes = {
     showLoginModal: PropTypes.bool.isRequired,
     toggleLoginModal: PropTypes.func.isRequired,
     showHomePageLink: PropTypes.bool,
-    forceDesktopLayout: PropTypes.bool,
+    desktopLayout: PropTypes.bool,
     title: PropTypes.string,
     position: PropTypes.oneOf(["absolute", "fixed", "relative", "static", "sticky"]),
 };

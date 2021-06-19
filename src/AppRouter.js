@@ -4,13 +4,33 @@ import React from "react";
 
 import { BrowserRouter, Switch } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import CompanyApplicationPage from "./pages/CompanyApplicationPage";
+import CompanyApplicationPage, {
+    CompanyApplicationPageController,
+    CompanyApplicationPageControllerContext,
+} from "./pages/CompanyApplicationPage";
 import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
-import PageLayout from "./components/PageLayout";
 import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
+import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
+import {
+    FinishCompanyRegistrationController,
+    FinishCompanyRegistrationControllerContext,
+} from "./components/Company/Registration/Finish/FinishCompanyRegistrationWidget";
+import FinishCompanyRegistrationPage from "./pages/FinishCompanyRegistrationPage";
+
+/**
+ *
+ * IMPORTANT: Each PageLayout must have a unique key, in order for the page changes to work correctly.
+ * If it doesn't, when changing pages, it will reuse the same PageLayout (reconciliation phase) and only change its contents
+ * and if the controller/context is different (which it probably is among pages),
+ * it will cause problems like hooks not being called in the same order
+ * Obviously, since the controller are differnt, then the hooks might also be different
+ *
+ */
+
+const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSize }) => !showConfirmationModal && isMobileSize;
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
@@ -19,7 +39,12 @@ const AppRouter = () => (
                 exact
                 path="/"
             >
-                <PageLayout showHomePageLink={false} forceDesktopLayout>
+                <PageLayout
+                    key="/"
+                    showHomePageLink={false}
+                    forceDesktopLayout
+                    layout={LayoutType.NONE}
+                >
                     <HomePage />
                 </PageLayout>
             </Route>
@@ -27,7 +52,15 @@ const AppRouter = () => (
                 exact
                 path="/apply/company"
             >
-                <PageLayout pageTitle="Company Application">
+                <PageLayout
+                    key="/apply/company"
+                    pageTitle="Company Application"
+                    layout={LayoutType.DESKTOP}
+                    shouldShowMobile={shoudlShowCompanyApplicationMobile}
+                    context={CompanyApplicationPageControllerContext}
+                    controller={CompanyApplicationPageController}
+                    controllerProps={{ showConfirmation: false }}
+                >
                     <CompanyApplicationPage />
                 </PageLayout>
             </Route>
@@ -38,8 +71,44 @@ const AppRouter = () => (
                 unauthorizedRedirectMessage="You are not allowed to access the applications review page."
                 authorize={(user) => (user.isAdmin)}
             >
-                <PageLayout pageTitle="Review Applications">
+                <PageLayout
+                    key="/review/applications"
+                    pageTitle="Review Applications"
+                    layout={LayoutType.DESKTOP}
+                >
                     <ApplicationsReviewPage />
+                </PageLayout>
+            </ProtectedRoute>
+            <ProtectedRoute
+                exact
+                path="/company/offers/manage"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="You are not allowed to access the My Offers page"
+                authorize={(user) => !!(user?.company)}
+            >
+                <PageLayout
+                    key="/company/offers/manage"
+                    pageTitle="My Offers"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <CompanyOffersManagementPage />
+                </PageLayout>
+            </ProtectedRoute>
+            <ProtectedRoute
+                exact
+                path="/company/registration/finish"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="To access this page you must be logged in and have a pending registration."
+                authorize={(user) => (user.company && !user.company.hasFinishedRegistration)}
+            >
+                <PageLayout
+                    key="/company/registration/finish"
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Finish Registration"
+                    context={FinishCompanyRegistrationControllerContext}
+                    controller={FinishCompanyRegistrationController}
+                >
+                    <FinishCompanyRegistrationPage />
                 </PageLayout>
             </ProtectedRoute>
             <Route
@@ -56,12 +125,22 @@ const AppRouter = () => (
             <Route
                 path="/error"
             >
-                <PageLayout forceDesktopLayout pageTitle="Unexpected error">
+                <PageLayout
+                    key="/error"
+                    forceDesktopLayout
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Unexpected error"
+                >
                     <ErrorPage />
                 </PageLayout>
             </Route>
             <Route>
-                <PageLayout forceDesktopLayout pageTitle="Page not found">
+                <PageLayout
+                    key="NOT_FOUND"
+                    forceDesktopLayout
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Page not found"
+                >
                     <NotFound />
                 </PageLayout>
             </Route>

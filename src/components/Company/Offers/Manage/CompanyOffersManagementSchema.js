@@ -5,3 +5,10 @@ export const columns = {
     location: { align: "right", disablePadding: false, label: "Location" },
     actions: { align: "right", disablePadding: false, label: "Actions", disableSorting: true },
 };
+
+/*
+export const ApplicationStateLabel = Object.freeze({
+    APPROVED: "Approved",
+    PENDING: "Pending",
+    REJECTED: "Rejected",
+}); */
