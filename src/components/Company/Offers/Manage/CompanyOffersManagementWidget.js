@@ -1,6 +1,6 @@
-import { Card, CardContent, /* Typography */
+import { Card, CardContent, IconButton, /* Typography */
     makeStyles,
-    Typography } from "@material-ui/core";
+    Typography, TableCell } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -10,7 +10,9 @@ import { alphabeticalSorter, generateTableCellFromField } from "../../../../util
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
 import { OfferTitleFilter, PublishDateFilter, PublishEndDateFilter, LocationFilter } from "../Filters/index";
-import { RowActions } from "../Actions";
+import { Edit as EditIcon } from "@material-ui/icons";
+// import { RowActions } from "../Actions";
+
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -66,10 +68,19 @@ const filters = [
     { id: "location-filter", render: LocationFilter },
 ];
 
-/*
+
 const RowActions = () => (
-    <Typography>Rows Actions</Typography>
-);  */
+    <TableCell align="right">
+        <IconButton
+            onClick={(e) => {
+                e.stopPropagation();
+                // Navigate to Edit Offer Page
+            }}
+        >
+            <EditIcon color="secondary" fontSize="default" />
+        </IconButton>
+    </TableCell>
+);
 
 
 const CompanyOffersManagementWidget = () => {
