@@ -8,7 +8,7 @@ export const RowFields = PropTypes.objectOf(
 );
 
 export const RowPayload = PropTypes.shape({
-    motivation: PropTypes.string.isRequired,
+    motivation: PropTypes.string,
     rejectReason: PropTypes.string,
 });
 
