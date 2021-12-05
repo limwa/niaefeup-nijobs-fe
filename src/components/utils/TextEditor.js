@@ -13,8 +13,9 @@ import { PropTypes } from "prop-types";
 const useStyles = makeStyles((theme) => ({
     editorToolbar: {
         marginBottom: theme.spacing(1),
+        display: "flex",
     },
-    headingIcon: {
+    headingBtn: {
         width: "36px",
         height: "36px",
     },
@@ -104,7 +105,7 @@ const EditorToolbar = ({ editor, disabled }) => {
             <Box ml={1} display="inline">
                 <ToggleButtonGroup size="small" value={formats} aria-label="text lists">
                     <ToggleButton
-                        className={classes.headingIcon}
+                        className={classes.headingBtn}
                         value="heading1"
                         aria-label="heading1"
                         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -114,7 +115,7 @@ const EditorToolbar = ({ editor, disabled }) => {
                     </ToggleButton>
 
                     <ToggleButton
-                        className={classes.headingIcon}
+                        className={classes.headingBtn}
                         value="heading2"
                         aria-label="heading2"
                         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
@@ -124,7 +125,7 @@ const EditorToolbar = ({ editor, disabled }) => {
                     </ToggleButton>
 
                     <ToggleButton
-                        className={classes.headingIcon}
+                        className={classes.headingBtn}
                         value="heading3"
                         aria-label="heading3"
                         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
@@ -134,7 +135,7 @@ const EditorToolbar = ({ editor, disabled }) => {
                     </ToggleButton>
 
                     <ToggleButton
-                        className={classes.headingIcon}
+                        className={classes.headingBtn}
                         value="heading4"
                         aria-label="heading4"
                         onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
@@ -144,7 +145,7 @@ const EditorToolbar = ({ editor, disabled }) => {
                     </ToggleButton>
 
                     <ToggleButton
-                        className={classes.headingIcon}
+                        className={classes.headingBtn}
                         value="heading5"
                         aria-label="heading5"
                         onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
@@ -226,8 +227,8 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
 
 TextEditor.propTypes = {
     content: PropTypes.any.isRequired,
-    onChangeDescription: PropTypes.string.isRequired,
-    onChangeDescriptionText: PropTypes.string.isRequired,
+    onChangeDescription: PropTypes.func.isRequired,
+    onChangeDescriptionText: PropTypes.func.isRequired,
     error: PropTypes.any,
     helperText: PropTypes.any,
     disabled: PropTypes.bool,
