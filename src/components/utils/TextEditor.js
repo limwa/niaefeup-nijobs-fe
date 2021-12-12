@@ -14,10 +14,11 @@ const useStyles = makeStyles((theme) => ({
     editorToolbar: {
         marginBottom: theme.spacing(1),
         display: "flex",
+        flexWrap: "wrap",
     },
     headingBtn: {
-        width: "36px",
-        height: "36px",
+        width: theme.spacing(4.5),
+        height: theme.spacing(4.5),
     },
 }));
 
@@ -37,7 +38,7 @@ const EditorToolbar = ({ editor, disabled }) => {
             if (editor.isActive("underline")) state.push("underline");
             if (editor.isActive("bulletList")) state.push("bulletList");
             if (editor.isActive("orderedList")) state.push("orderedList");
-            for (let level = 1; level < 6; level++) {
+            for (let level = 1; level <= 6; level++) {
                 if (editor.isActive("heading", { level })) state.push(`heading${level}`);
             }
             setFormats(state);
@@ -54,7 +55,7 @@ const EditorToolbar = ({ editor, disabled }) => {
     return (
 
         <div className={classes.editorToolbar}>
-            <Box mr={1} display="inline">
+            <Box mr={2} mb={1} display="inline">
                 <ToggleButtonGroup size="small" value={formats} aria-label="text formatting">
                     <ToggleButton
                         value="bold"
@@ -82,7 +83,7 @@ const EditorToolbar = ({ editor, disabled }) => {
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Box>
-            <Box ml={1} mr={1} display="inline">
+            <Box mr={2} display="inline">
                 <ToggleButtonGroup size="small" value={formats} aria-label="text lists">
                     <ToggleButton
                         value="bulletList"
@@ -102,7 +103,7 @@ const EditorToolbar = ({ editor, disabled }) => {
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Box>
-            <Box ml={1} display="inline">
+            <Box display="inline">
                 <ToggleButtonGroup size="small" value={formats} aria-label="text lists">
                     <ToggleButton
                         className={classes.headingBtn}
@@ -153,6 +154,16 @@ const EditorToolbar = ({ editor, disabled }) => {
                     >
                         <Typography>h5</Typography>
                     </ToggleButton>
+
+                    <ToggleButton
+                        className={classes.headingBtn}
+                        value="heading6"
+                        aria-label="heading6"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
+                        disabled={disabled}
+                    >
+                        <Typography>h6</Typography>
+                    </ToggleButton>
                 </ToggleButtonGroup>
             </Box>
         </div>
@@ -174,13 +185,12 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
                 placeholder: "Write a description for this offer. You can specify goals, project and daily work details, etc.",
             }),
             Heading.configure({
-                levels: [1, 2, 3, 4, 5],
+                levels: [1, 2, 3, 4, 5, 6],
             }),
         ],
         content,
         editable: true,
         editorProps: {
-
             attributes: {
                 class: "editor", // Cannot use makeStyles with this since it won't update the class name on re-render :(
             },

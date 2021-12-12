@@ -35,8 +35,8 @@ export const isValidPublishEndDate = (publishDateRaw, publishEndDateRaw) => {
 };
 
 export const defaultDates = {
-    publishDate: () => new Date(),
-    publishEndDate: () => new Date(Date.parse(new Date()) + (OFFER_MAX_LIFETIME_MONTHS * MONTH_IN_MS) - DAY_IN_MS),
+    getPublishDate: () => new Date(),
+    getPublishEndDate: () => new Date(Date.parse(new Date()) + (OFFER_MAX_LIFETIME_MONTHS * MONTH_IN_MS) - DAY_IN_MS),
 };
 
 export const generateValidationRule = validationRulesGenerator(CreateOfferConstants);
